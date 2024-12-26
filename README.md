@@ -7,7 +7,8 @@ left click to spawn a body. You need to enter a mass for the body.
 
 
 Example below:
-https://github.com/user-attachments/assets/4aaf6a18-c0cf-44aa-951d-1bfc69f84892
+![n_body_problem](https://github.com/user-attachments/assets/8f6d1bcf-dd86-4e8f-b84b-bb9feebcbb8b)
+
 
 To do:
 Make the screen follow the bodies in the simulation.
