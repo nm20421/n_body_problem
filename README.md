@@ -8,7 +8,9 @@ left click to spawn a body. You need to enter a mass for the body.
 
 Rough Example below:
 
-![n_body_problem](https://github.com/user-attachments/assets/8f6d1bcf-dd86-4e8f-b84b-bb9feebcbb8b)
+![n_body_problem_2](https://github.com/user-attachments/assets/77a8831c-70b7-42ec-a25e-5927a05b8a53)
+
+
 
 
 To do:
