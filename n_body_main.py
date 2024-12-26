@@ -19,7 +19,7 @@ def text_print(display,text_string):
     display.blit(text_t,(0,0))
 
 
-def spawn_body(body_list,m_pos,scale):
+def spawn_body(body_list,m_pos,scale,x_offset,y_offset):
     text_print(display,'Enter Mass')
     screen.blit(pygame.transform.scale(display, screen.get_size()),(0,0))
     pygame.display.update()
@@ -30,13 +30,14 @@ def spawn_body(body_list,m_pos,scale):
     #2. mass
     n_bodies_old = len(body_list)
     m_pos = list(m_pos)
-    m_pos[0] = m_pos[0]*scale
+    m_pos[0] = m_pos[0]*scale 
     m_pos[1] = m_pos[1]*scale
     body_list[str(n_bodies_old)] = {
         "pos": m_pos,
         "velocity":[0,0],
         "mass": float(mass),
-        "pos_prev": []
+        "pos_prev": [],
+        "trail_colour": [rd.randint(0,255),rd.randint(0,255),rd.randint(0,255)]
     }
 
 def update(body_i,body_list,pos_old):
@@ -132,7 +133,7 @@ def run(body_list,scale):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 
                 m_pos = pygame.mouse.get_pos()
-                spawn_body(body_list,m_pos,scale)
+                spawn_body(body_list,m_pos,scale,x_offset,y_offset)
                 print('particle spawned at: ',m_pos)
                 #spawn particle
             
@@ -146,6 +147,23 @@ def run(body_list,scale):
         #for body in range(0,n_bodies):
         #    pos_old.append(body_list[str(body)]["pos"])
 
+        #Find centre of mass of all bodies
+        positions_x = []
+        positions_y = []
+        for body in range(0,n_bodies):
+            positions_x.append(body_list[str(body)]["pos"][0])
+            positions_y.append(body_list[str(body)]["pos"][1])
+        
+        if n_bodies == 0:
+            x_com = 0
+            y_com = 0
+        else:        
+            x_com = np.mean(positions_x)
+            y_com = np.mean(positions_y)
+
+        x_offset = mid_screen[0]-x_com
+        y_offset = mid_screen[1]-y_com
+
         for body in range(0,n_bodies):
             #update
             if sim == True:
@@ -153,7 +171,7 @@ def run(body_list,scale):
 
             #render
             pos = body_list[str(body)]["pos"]
-            shape = pygame.Rect(pos[0],pos[1],15,15)
+            #shape = pygame.Rect(pos[0],pos[1],15,15)
             #pygame.draw.rect(display,(255,255,255),shape)
 
             #determine size of particle:
@@ -175,17 +193,24 @@ def run(body_list,scale):
             else:
                 size = dy_dx*mass + c_int
 
-            pygame.draw.circle(display,(255,255,255),pos,size)
+
+            
+            
+            
+            pos_cam = [pos[0]+x_offset,pos[1]+y_offset] 
+            pygame.draw.circle(display,(255,255,255),pos_cam,size)
             #render trail
             trail_length = len(body_list[str(body)]["pos_prev"])
             for t in range(0,trail_length):
                 t_pos = body_list[str(body)]["pos_prev"][t]
-                shape = pygame.Rect(t_pos[0],t_pos[1],3,3)
-                pygame.draw.rect(display,(255,0,0),shape)
+                t_pos_cam = [t_pos[0]+x_offset,t_pos[1]+y_offset]
+                t_col = body_list[str(body)]["trail_colour"]
+                shape = pygame.Rect(t_pos_cam[0],t_pos_cam[1],3,3)
+                pygame.draw.rect(display,t_col,shape)
                 #pygame.draw.circle(display,(255,0,0),t_pos,3)
             
-            
-
+        #centre of mass
+        #pygame.draw.circle(display,(0,0,255),[x_com,y_com],20)
         if sim == False:
             text_print(display,'Sim Paused')
         #Scale up screen
@@ -211,6 +236,9 @@ scale = 2
 
 x_res = int(x_window*scale)
 y_res = int(y_window*scale)
+
+mid_screen =[x_res/2,y_res/2]
+
 screen = pygame.display.set_mode((x_window,y_window))
 
         # To scale up the screen we render at a smaller size then scale it up.
@@ -224,7 +252,7 @@ clock = pygame.time.Clock()
 
 
 body_list = {}
-
+camera = [0,0]
 map = np.zeros([x_res,y_res], dtype=int)
 
 run(body_list,scale)
