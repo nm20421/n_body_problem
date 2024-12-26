@@ -12,8 +12,17 @@ def fps_counter(display):
     fps_t = font.render(fps , 1, pygame.Color("RED"))
     display.blit(fps_t,(0,0))
 
+def text_print(display,text_string):
+    font = pygame.font.SysFont("Arial" , 100 , bold = True)
+    text = str(text_string)
+    text_t = font.render(text , 1, pygame.Color("RED"))
+    display.blit(text_t,(0,0))
+
 
 def spawn_body(body_list,m_pos,scale):
+    text_print(display,'Enter Mass')
+    screen.blit(pygame.transform.scale(display, screen.get_size()),(0,0))
+    pygame.display.update()
 
     mass = input('input mass:')
     #create particle with:
@@ -177,8 +186,8 @@ def run(body_list,scale):
             
             
 
-
-        #fps_counter(display)
+        if sim == False:
+            text_print(display,'Sim Paused')
         #Scale up screen
         screen.blit(pygame.transform.scale(display, screen.get_size()),(0,0))
         pygame.display.update()
