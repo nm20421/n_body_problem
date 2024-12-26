@@ -12,4 +12,4 @@ Rough Example below:
 
 
 To do:
-Make the screen follow the bodies in the simulation.
+Make the screen follow the bodies in the simulation. Best way would be to get the centre of mass of all particles and set offset to that.
