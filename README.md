@@ -1,5 +1,5 @@
 # n_body_problem
-Code that allows for the creation of masses that are affected by gravitational forces.
+Code that allows for the creation and simulation of masses that are affected by gravitational forces.
 
 Controls:
 left click to spawn a body. You need to enter a mass for the body.
